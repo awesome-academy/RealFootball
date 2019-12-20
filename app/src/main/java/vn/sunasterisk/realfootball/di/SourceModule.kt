@@ -7,10 +7,12 @@ import org.koin.dsl.module
 import vn.sunasterisk.realfootball.FootballApplication
 import vn.sunasterisk.realfootball.base.ContextProviders
 import vn.sunasterisk.realfootball.data.local.FootBallDb
+import vn.sunasterisk.realfootball.data.repository.HighlightRepository
 import vn.sunasterisk.realfootball.data.repository.MatchRepository
 import vn.sunasterisk.realfootball.data.repository.PlayerRepository
 import vn.sunasterisk.realfootball.data.repository.TeamRepository
 import vn.sunasterisk.realfootball.ui.detailmatch.DetailViewModel
+import vn.sunasterisk.realfootball.ui.highlight.HighlightViewModel
 import vn.sunasterisk.realfootball.ui.match.MatchViewModel
 import vn.sunasterisk.realfootball.ui.playerdetail.DetailPlayerViewModel
 import vn.sunasterisk.realfootball.ui.search.SearchPlayerViewModel
@@ -22,9 +24,11 @@ val sourceModule = module {
     single { FootBallDb.getDatabase().matchDao() }
     single { FootBallDb.getDatabase().playerDao() }
     single { FootBallDb.getDatabase().teamDao() }
+    single { FootBallDb.getDatabase().highlightDao() }
     single { MatchRepository(get(), get(named(RemoteProperties::class.java.name)), get()) }
     single { TeamRepository(get(), get(named(RemoteProperties::class.java.name)), get()) }
     single { PlayerRepository(get(), get(named(RemoteProperties::class.java.name)), get()) }
+    single { HighlightRepository(get(), get(named(RemoteHighlight::class.java.name)), get()) }
 }
 val viewModelModule = module {
     single(named(FootballApplication::class.java.name)) { androidApplication() }
@@ -34,4 +38,5 @@ val viewModelModule = module {
     viewModel { DetailTeamViewModel(get(named(FootballApplication::class.java.name))) }
     viewModel { SearchPlayerViewModel(get(named(FootballApplication::class.java.name)), get()) }
     viewModel { DetailPlayerViewModel(get(named(FootballApplication::class.java.name))) }
+    viewModel { HighlightViewModel(get(named(FootballApplication::class.java.name)), get()) }
 }

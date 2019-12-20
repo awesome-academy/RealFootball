@@ -16,9 +16,16 @@ import java.util.concurrent.TimeUnit
 object RemoteProperties {
     const val TIME_OUT = 10L
     const val BaseUrl = "https://www.thesportsdb.com/api/v1/json/1/"
+
+}
+
+object RemoteHighlight {
+    const val HighlithUrl = "https://www.scorebat.com/"
 }
 
 fun createBaseUrl() = RemoteProperties.BaseUrl
+
+fun createHighlightUrl() = RemoteHighlight.HighlithUrl
 
 inline fun <reified T> createWebService(
     baseUrl: String,
@@ -33,6 +40,20 @@ inline fun <reified T> createWebService(
         .client(client)
         .build()
     return retrofit.create(T::class.java)
+}
+
+inline fun <reified T> createHighlightService(
+    gsonConverterFactory: GsonConverterFactory,
+    liveDataCallAdapterFactory: LiveDataCallAdapterFactory,
+    client: OkHttpClient
+): T {
+    val retrofitHighlight = Retrofit.Builder()
+        .baseUrl(createHighlightUrl())
+        .addConverterFactory(gsonConverterFactory)
+        .addCallAdapterFactory(liveDataCallAdapterFactory)
+        .client(client)
+        .build()
+    return retrofitHighlight.create(T::class.java)
 }
 
 private fun createOkHttpClient(): OkHttpClient {
@@ -54,12 +75,15 @@ private fun createOkHttpClient(): OkHttpClient {
 
 val remoteModule = module {
     single { createBaseUrl() }
-    single { NetworkInterceptor() }
-    single { ResponseInterceptor() }
-    single { GsonConverterFactory.create() }
-    single { LiveDataCallAdapterFactory() }
-    single { createOkHttpClient() }
+    factory { NetworkInterceptor() }
+    factory { ResponseInterceptor() }
+    factory { GsonConverterFactory.create() }
+    factory { LiveDataCallAdapterFactory() }
+    factory { createOkHttpClient() }
     single(named(RemoteProperties::class.java.name)) {
         createWebService<FootballService>(get(), get(), get(), get())
+    }
+    single(named(RemoteHighlight::class.java.name)) {
+        createHighlightService<HighlightService>(get(), get(), get())
     }
 }

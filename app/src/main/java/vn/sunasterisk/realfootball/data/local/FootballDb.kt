@@ -7,12 +7,13 @@ import androidx.room.RoomDatabase
 import com.rifqimfahmi.foorballapps.vo.FavoriteMatch
 import com.rifqimfahmi.foorballapps.vo.FavoriteTeam
 import vn.sunasterisk.realfootball.FootballApplication
+import vn.sunasterisk.realfootball.data.model.Highlight
 import vn.sunasterisk.realfootball.data.model.Match
 import vn.sunasterisk.realfootball.data.model.Player
 import vn.sunasterisk.realfootball.data.model.Team
 
 @Database(
-    entities = [Match::class, Team::class, Player::class, FavoriteMatch::class, FavoriteTeam::class],
+    entities = [Match::class, Team::class, Player::class, FavoriteMatch::class, FavoriteTeam::class,Highlight::class],
     version = 1
 )
 abstract class FootBallDb : RoomDatabase() {
@@ -20,6 +21,7 @@ abstract class FootBallDb : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
     abstract fun matchDao(): MatchDao
     abstract fun teamDao(): TeamDao
+    abstract fun highlightDao() : HighlightDao
 
     companion object {
         @Volatile

@@ -1,6 +1,8 @@
 package vn.sunasterisk.realfootball.utils
 
 import android.view.View
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -73,6 +75,18 @@ object BindingUtil {
                 .applyDefaultRequestOptions(requestOptions)
                 .load(it)
                 .into(imageView)
+        }
+    }
+
+    @BindingAdapter("android:embed")
+    @JvmStatic
+    fun embedHtml(webView: WebView, string: String?){
+        string?.let {
+            webView.apply {
+                settings.javaScriptEnabled=true
+                webChromeClient= WebChromeClient()
+                loadData(string,"text/html","utf-8")
+            }
         }
     }
 }

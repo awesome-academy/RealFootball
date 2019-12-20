@@ -20,4 +20,9 @@
         android:name="vn.sunasterisk.realfootball.ui.search.SearchPlayerFragment"
         android:label="SearchPlayerFragment"
         tools:layout="@layout/fragment_search_player"/>
+    <fragment
+        android:id="@+id/navigation_highlight"
+        android:name="vn.sunasterisk.realfootball.ui.highlight.HighlightFragment"
+        android:label="HighlightFragment"
+        tools:layout="@layout/fragment_highlight"/>
 </navigation>
